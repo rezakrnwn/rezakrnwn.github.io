@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Detail Match</title>
+  <meta name="description" content="My Football PWA" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="css/materialize.min.css" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#039be5" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+  <!-- Navigasi -->
+  <nav class="light-blue darken-1" role="navigation">
+    <div class="nav-wrapper container">
+      <a href="#" class="brand-logo" id="logo-container">Football</a>
+      <a href="./index.html#matches" id="navBack" class="sidenav-trigger" data-target="nav-mobile">
+        <i class="material-icons">arrow_back</i>
+      </a>
+      <ul class="topnav right hide-on-med-and-down"></ul>
+      <ul class="sidenav" id="nav-mobile"></ul>
+    </div>
+  </nav>
+  <!-- Akhir Navigasi -->
+  <div class="container" id="body-content"></div>
+  <div class="fixed-action-btn">
+    <a class="btn-floating btn-large red" id="save">
+      <i class="large material-icons">save</i>
+    </a>
+    <a class="btn-floating btn-large red" id="delete">
+      <i class="large material-icons">delete</i>
+    </a>
+  </div>
+  <script type="text/javascript" src="https://unpkg.com/snarkdown@1.0.2/dist/snarkdown.umd.js"></script>
+  <script src="js/materialize.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/idb.js"></script>
+  <script src="js/db.js"></script>
+  <script>
+    // REGISTER SERVICE WORKER
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker
+          .register("/service-worker.js")
+          .then(function () {
+            console.log("Pendaftaran ServiceWorker berhasil");
+          })
+          .catch(function () {
+            console.log("Pendaftaran ServiceWorker gagal");
+          });
+      });
+    } else {
+      console.log("ServiceWorker belum didukung browser ini.");
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      let urlParams = new URLSearchParams(window.location.search);
+      let isFromSaved = urlParams.get("saved");
+      let btnSave = document.getElementById("save");
+      let btnDelete = document.getElementById("delete");
+      let item = '';
+
+      if (isFromSaved) {
+        document.getElementById("navBack").href="./index.html#saved";
+        btnSave.style.display = 'none';
+        getSavedMatchById();
+      } else {
+        document.getElementById("navBack").href="./index.html#matches";
+        btnDelete.style.display = 'none';
+        item = getMatchById();
+      }
+
+      btnSave.onclick = function () {
+        item.then(function (match) {
+          saveForLater(match);
+        });
+      };
+
+      btnDelete.onclick = function () {
+        deleteSaved().then((status) => {
+          if (status) {
+            btnDelete.style.display = 'none';
+          }
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>
