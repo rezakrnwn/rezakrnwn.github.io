@@ -2,23 +2,6 @@ const base_url = "https://api.football-data.org/";
 const token = "a25f333625104998bba806cf70ad777d";
 const league_id = '2002';
 
-/* function status(response) {
-  if (response.status !== 200) {
-    console.log("Error : " + response.status);
-    return Promise.reject(new Error(response.statusText));
-  } else {
-    return Promise.resolve(response);
-  }
-} */
-
-/* function json(response) {
-  return response.json();
-} */
-
-/* function error(error) {
-  console.log("Error : " + error);
-} */
-
 const status = response => {
   if (response.status !== 200) {
     console.log(`Error : ${response.status}`);
@@ -35,14 +18,6 @@ const json = response => {
 const error = error => {
   console.log(`Error : ${error}`);
 }
-
-const fetchApi = url => {
-  return fetch(url, {
-    headers: {
-      'X-Auth-Token': token
-    }
-  });
-};
 
 const getStandings = () => {
   if ('caches' in window) {
