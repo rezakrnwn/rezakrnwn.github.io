@@ -107,7 +107,9 @@
         url: '/js/db.js',
         revision: '2'
       },
-    ]);
+    ], {
+      ignoreURLParametersMatching: [/.*/]
+    });
 
     workbox.routing.registerRoute(
       new RegExp('/pages/'),
